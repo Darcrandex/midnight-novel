@@ -1,15 +1,11 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-  </div>
-
-  <router-view></router-view>
+  <h1>NovelList</h1>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Home",
+  name: "NovelList",
 });
 </script>

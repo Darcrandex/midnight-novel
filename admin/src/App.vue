@@ -1,30 +1,49 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <router-view></router-view>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "@/store";
+
+export default defineComponent({
+  name: "App",
+  setup() {
+    const mainRouter = useRouter();
+    const { user } = useStore();
+
+    // 校验用户权限
+    mainRouter.beforeEach((to, from, next) => {
+      // 判断是否需要校验
+      if (to.meta && Array.isArray(to.meta.roles)) {
+        // 判断用户是否有权限
+        const haveAuth = user.checkRoles(to.meta.roles);
+        if (haveAuth) {
+          next();
+        } else {
+          next("/403");
+        }
+      } else {
+        next();
+      }
+    });
+  },
+});
+</script>
+
 <style lang="scss">
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>
