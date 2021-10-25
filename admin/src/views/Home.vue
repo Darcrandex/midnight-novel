@@ -1,28 +1,28 @@
 <template>
-  <ElContainer>
-    <ElAside>
-      <ElMenu
+  <el-container>
+    <el-aside>
+      <el-menu
         :default-active="$route.path"
         :router="true"
         style="height: 100vh;"
       >
-        <ElMenuItem v-for="item in menus" :key="item.path" :index="item.path">
+        <el-menu-item v-for="item in menus" :key="item.path" :index="item.path">
           <template #title>
             <i class="el-icon-location"></i>
             <span>{{ item.title }}</span>
           </template>
-        </ElMenuItem>
-      </ElMenu>
-    </ElAside>
-    <ElContainer>
-      <ElHeader>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
+    <el-container>
+      <el-header>
         header
-      </ElHeader>
-      <ElMain>
+      </el-header>
+      <el-main>
         <router-view></router-view>
-      </ElMain>
-    </ElContainer>
-  </ElContainer>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script lang="ts">

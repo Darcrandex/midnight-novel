@@ -23,14 +23,14 @@ export const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "/novels",
-        name: "NovelManagement",
-        component: () => import("@/views/NovelManagement.vue"),
+        name: "Novels",
+        component: () => import("@/views/Novels.vue"),
         meta: { title: "小说管理", roles: [Roles.Admin, Roles.Writer] },
       },
       {
         path: "/novels/:novelId",
-        name: "NovelItem",
-        component: () => import("@/views/NovelItem.vue"),
+        name: "Novel",
+        component: () => import("@/views/Novel.vue"),
         meta: { roles: [Roles.Admin, Roles.Writer] },
       },
       {
@@ -38,6 +38,13 @@ export const routes: Array<RouteRecordRaw> = [
         name: "Chapter",
         component: () => import("@/views/Chapter.vue"),
         meta: { roles: [Roles.Admin, Roles.Writer] },
+      },
+
+      {
+        path: "/categories",
+        name: "Categories",
+        component: () => import("@/views/Categories.vue"),
+        meta: { title: "分类管理", roles: [Roles.Admin, Roles.Writer] },
       },
     ],
   },

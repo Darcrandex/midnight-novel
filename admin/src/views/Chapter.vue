@@ -1,5 +1,10 @@
 <template>
-  <h1>Chapter</h1>
+  <el-breadcrumb>
+    <el-breadcrumb-item to="/novels">小说管理</el-breadcrumb-item>
+    <el-breadcrumb-item :to="`/novels/${novelId}`">小说详情</el-breadcrumb-item>
+    <el-breadcrumb-item>章节详情</el-breadcrumb-item>
+  </el-breadcrumb>
+
   <TinyMceEditor />
 </template>
 
@@ -15,6 +20,8 @@ export default defineComponent({
   setup() {
     const { novelId, chapterId } = useRoute().params;
     console.log(novelId, chapterId);
+
+    return { novelId, chapterId };
   },
 });
 </script>
