@@ -8,7 +8,7 @@ import { Roles } from "@/enums";
 // which is lazy-loaded when the route is visited.
 // import(/* webpackChunkName: "about" */ "../views/About.vue"),
 
-const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
@@ -19,13 +19,13 @@ const routes: Array<RouteRecordRaw> = [
         path: "/dashboard",
         name: "Dashboard",
         component: () => import("@/views/Dashboard.vue"),
-        meta: { roles: [Roles.Admin, Roles.Writer] },
+        meta: { title: "仪表盘", roles: [Roles.Admin, Roles.Writer] },
       },
       {
         path: "/novels",
         name: "NovelManagement",
         component: () => import("@/views/NovelManagement.vue"),
-        meta: { roles: [Roles.Admin, Roles.Writer] },
+        meta: { title: "小说管理", roles: [Roles.Admin, Roles.Writer] },
       },
       {
         path: "/novels/:novelId",

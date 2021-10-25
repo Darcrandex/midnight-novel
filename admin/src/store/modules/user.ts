@@ -15,11 +15,12 @@ function userStore() {
   };
 
   // 检查用户权限
-  const checkRoles = (roles: string[] = []) => {
+  const haveRoles = (roles: string[] | undefined) => {
+    if (roles === undefined || roles.length === 0) return true;
     return state.roles.some((r) => roles.includes(r));
   };
 
-  return { state, randomName, checkRoles };
+  return { state, randomName, haveRoles };
 }
 
 export default userStore();
