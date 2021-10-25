@@ -1,11 +1,24 @@
 <template>
-  <el-header class="home-header">Header</el-header>
+  <el-header class="home-header">
+    <span>MidnightNovel</span>
+    <div class="header-right">
+      <i
+        class="el-icon-message-solid"
+        style="font-size: 24px;margin-right: 20px;"
+      ></i>
+      <el-avatar> user </el-avatar>
+    </div>
+  </el-header>
 
   <aside class="home-aside">
-    <el-menu :default-active="$route.path" :router="true">
+    <el-menu
+      :default-active="$route.path"
+      :router="true"
+      style="height: 100vh;"
+    >
       <el-menu-item v-for="item in menus" :key="item.path" :index="item.path">
         <template #title>
-          <i class="el-icon-location"></i>
+          <i :class="item.ico"></i>
           <span>{{ item.title }}</span>
         </template>
       </el-menu-item>
@@ -35,7 +48,11 @@ export default defineComponent({
       root
         ?.filter((v) => v.meta && v.meta.title)
         .filter((v) => user.haveRoles(v?.meta?.roles as string[]))
-        .map((v) => ({ path: v.path, title: v?.meta?.title })) ?? [];
+        .map((v) => ({
+          path: v.path,
+          title: v?.meta?.title,
+          ico: v?.meta?.ico,
+        })) ?? [];
 
     return { menus };
   },
@@ -50,7 +67,18 @@ $aside-width: 200px;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
   width: 100%;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(#000, 0.2);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 .home-aside {

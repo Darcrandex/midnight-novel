@@ -19,13 +19,21 @@ export const routes: Array<RouteRecordRaw> = [
         path: "/dashboard",
         name: "Dashboard",
         component: () => import("@/views/Dashboard.vue"),
-        meta: { title: "仪表盘", roles: [Roles.Admin, Roles.Writer] },
+        meta: {
+          title: "仪表盘",
+          ico: "el-icon-data-line",
+          roles: [Roles.Admin, Roles.Writer],
+        },
       },
       {
         path: "/novels",
         name: "Novels",
         component: () => import("@/views/Novels.vue"),
-        meta: { title: "小说管理", roles: [Roles.Admin, Roles.Writer] },
+        meta: {
+          title: "小说管理",
+          ico: "el-icon-collection",
+          roles: [Roles.Admin, Roles.Writer],
+        },
       },
       {
         path: "/novels/:novelId",
@@ -44,7 +52,11 @@ export const routes: Array<RouteRecordRaw> = [
         path: "/categories",
         name: "Categories",
         component: () => import("@/views/Categories.vue"),
-        meta: { title: "分类管理", roles: [Roles.Admin, Roles.Writer] },
+        meta: {
+          title: "分类管理",
+          ico: "el-icon-menu",
+          roles: [Roles.Admin, Roles.Writer],
+        },
       },
     ],
   },
