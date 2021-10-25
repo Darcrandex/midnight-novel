@@ -19,7 +19,6 @@ export default defineComponent({
 
   setup() {
     const { novelId, chapterId } = useRoute().params;
-    console.log(novelId, chapterId);
 
     return { novelId, chapterId };
   },

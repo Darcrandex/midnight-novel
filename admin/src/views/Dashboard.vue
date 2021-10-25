@@ -1,5 +1,7 @@
 <template>
   <h1>dashboard</h1>
+
+  <div style="height: 200vh;">c</div>
 </template>
 
 <script lang="ts">
