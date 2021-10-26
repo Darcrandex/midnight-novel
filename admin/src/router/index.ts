@@ -51,7 +51,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: "/categories",
         name: "Categories",
-        component: () => import("@/views/Categories.vue"),
+        component: () => import("@/views/Categories/index.vue"),
         meta: {
           title: "分类管理",
           ico: "el-icon-menu",
