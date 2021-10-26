@@ -1,4 +1,4 @@
-import { Prop, Severity, modelOptions } from '@typegoose/typegoose';
+import { Prop, Severity, modelOptions } from '@typegoose/typegoose'
 
 @modelOptions({
   options: {
@@ -8,7 +8,8 @@ import { Prop, Severity, modelOptions } from '@typegoose/typegoose';
 })
 export class Category {
   @Prop({ required: true })
-  name: string;
+  name: string
 
-  children: string[];
+  @Prop()
+  chilldren: { name: string }[]
 }

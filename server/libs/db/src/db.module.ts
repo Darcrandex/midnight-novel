@@ -1,16 +1,19 @@
-import { Global, Module } from '@nestjs/common';
-import { TypegooseModule } from 'nestjs-typegoose';
-import { DbService } from './db.service';
-import { Category } from './models/Category.model';
+import { Global, Module } from '@nestjs/common'
+import { TypegooseModule } from 'nestjs-typegoose'
+import { DbService } from './db.service'
+import configuration from 'configuration'
 
-const models = TypegooseModule.forFeature([Category]);
+import { Category } from './models/category.model'
+
+const models = TypegooseModule.forFeature([Category])
 
 @Global()
 @Module({
   imports: [
+    configuration(),
     TypegooseModule.forRootAsync({
       useFactory: () => ({
-        uri: 'mongodb://localhost:27017/midnight-novel-db',
+        uri: process.env.DATA_BASE_URI,
       }),
     }),
 

@@ -6,10 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "concurrently --kill-others \"nest start admin --watch\" \"nest start web --watch\"",
+    "dev": "cross-env NODE_ENV=dev nest start --watch",
     "prebuild": "rimraf dist",
-    "build": "nest build admin && nest build web",
-    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -19,14 +19,15 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/server/test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^1.0.2",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@typegoose/typegoose": "^9.2.0",
-    "mongoose": "^6.0.11",
+    "mongoose": "^6.0.12",
     "nestjs-typegoose": "^7.1.38",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -42,7 +43,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
-    "concurrently": "^6.3.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
@@ -72,7 +73,7 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/",
+      "<rootDir>/src/",
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
