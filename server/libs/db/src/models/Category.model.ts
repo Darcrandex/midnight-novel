@@ -11,5 +11,5 @@ export class Category {
   name: string
 
   @Prop()
-  chilldren: { name: string }[]
+  children: { name: string }[]
 }
