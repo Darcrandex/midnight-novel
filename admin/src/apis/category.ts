@@ -24,7 +24,7 @@ export async function apiUpdateCategory(
   return await http.patch(url, params);
 }
 
-export async function apiRemoveCategory(id: string) {
+export async function apiRemoveCategory(id: string): Promise<void> {
   const url = `/category/${id}`;
   return await http.delete(url);
 }
