@@ -1,15 +1,17 @@
-import { Prop, Severity, modelOptions } from '@typegoose/typegoose'
+import { Prop } from '@typegoose/typegoose'
 
-@modelOptions({
-  options: {
-    allowMixed: Severity.ALLOW,
-    customName: 'notification',
-  },
-})
+// 子分类
+// 属于一个子节点
+// 不会生成一个表
+class SubCategory {
+  @Prop()
+  name: string
+}
+
 export class Category {
   @Prop({ required: true })
-  name: string
+  name!: string
 
-  @Prop()
-  children: { name: string }[]
+  @Prop({ type: () => SubCategory })
+  children: SubCategory[]
 }
