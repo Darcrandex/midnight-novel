@@ -10,12 +10,15 @@ import {
 import { Novel } from '@app/db/models/novel.model'
 import { InjectModel } from 'nestjs-typegoose'
 import { ReturnModelType } from '@typegoose/typegoose'
+import { Chapter } from '@app/db/models/chapter.model'
 
 @Controller('novel')
 export class NovelController {
   constructor(
     @InjectModel(Novel)
     private readonly novelModel: ReturnModelType<typeof Novel>,
+    @InjectModel(Chapter)
+    private readonly chapterModel: ReturnModelType<typeof Chapter>,
   ) {}
 
   @Post()
@@ -32,7 +35,9 @@ export class NovelController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    await this.novelModel.findByIdAndRemove(id)
+    const removed = await this.novelModel.findByIdAndRemove(id)
+    // 章节连带删除
+    await this.chapterModel.find({ novel: removed._id }).remove()
     return { code: 2000 }
   }
 
