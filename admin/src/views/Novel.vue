@@ -5,9 +5,7 @@
   </el-breadcrumb>
 
   <section>
-    <el-button @click="onSubmit">
-      {{ isCreate ? "新增" : "更新" }}
-    </el-button>
+    <el-button @click="onSubmit">{{ isCreate ? "新增" : "更新" }}</el-button>
   </section>
 
   <section>
@@ -17,7 +15,12 @@
     </el-form>
   </section>
 
-  <section>
+  <section v-show="isCreate">
+    <h2>章节</h2>
+    <p>请先重建小说</p>
+  </section>
+
+  <section v-show="!isCreate">
     <h2>章节</h2>
     <router-link :to="`/novels/${novelId}/new`">
       <el-button>新增章节</el-button>
@@ -25,9 +28,8 @@
 
     <ol>
       <li v-for="item in form.chapters" :key="item._id">
-        <router-link :to="`/novels/${novelId}/${item._id}`">{{
-          item.title
-        }}</router-link>
+        <router-link :to="`/novels/${novelId}/${item._id}`">{{ item.title }}</router-link>
+        <el-button @click="onRemoveChapter(item._id)">删除</el-button>
       </li>
     </ol>
   </section>
@@ -37,6 +39,7 @@
 import { defineComponent, ref, reactive, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { apiGetNovelById, apiCreateNovel, apiUpdateNovel } from "@/apis/novel";
+import { apiRemoveChapter } from '@/apis/chapter'
 
 interface Novel {
   name: string;
@@ -62,8 +65,6 @@ export default defineComponent({
         form.name = record?.name as string;
         form.author = record.author as string;
         form.chapters = record.chapters as Novel["chapters"];
-
-        console.log("ffff", form);
       }
     };
 
@@ -81,9 +82,14 @@ export default defineComponent({
       await init();
     };
 
+    const onRemoveChapter = async (chapterId: string) => {
+      await apiRemoveChapter({ novelId: novelId.value, chapterId })
+      await init();
+    }
+
     onMounted(init);
 
-    return { form, novelId, isCreate, onSubmit };
+    return { form, novelId, isCreate, onSubmit, onRemoveChapter };
   },
 });
 </script>

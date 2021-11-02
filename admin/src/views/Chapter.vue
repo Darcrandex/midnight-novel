@@ -6,9 +6,7 @@
   </el-breadcrumb>
 
   <section>
-    <el-button @click="onSubmit">
-      {{ isCreate ? "新增" : "更新" }}
-    </el-button>
+    <el-button @click="onSubmit">{{ isCreate ? "新增" : "更新" }}</el-button>
 
     <el-input v-model="form.title"></el-input>
   </section>
@@ -17,34 +15,45 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { defineComponent, ref, reactive, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import TinyMceEditor from "@/components/TinyMceEditor.vue";
-import { apiCreateChapter } from "@/apis/chapter";
+import { apiCreateChapter, apiGetChapter, apiUpdateChapter } from "@/apis/chapter";
+
+interface Chapter {
+  title: string
+  content: string
+}
 
 export default defineComponent({
   name: "Chapter",
   components: { TinyMceEditor },
 
   setup() {
-    const { novelId, chapterId } = useRoute().params;
-    const params = reactive({ novelId, chapterId });
-    const isCreate = computed(() => params.chapterId === "new");
-    const form = reactive({ title: "", content: "" });
+    const router = useRouter()
+    const novelId = ref(useRoute().params.novelId as string)
+    const chapterId = ref(useRoute().params.chapterId as string)
+    const isCreate = computed(() => chapterId.value === "new");
+    const form: Chapter = reactive({ title: "", content: "" });
 
-    const init = () => {
+    const init = async () => {
       if (!isCreate.value) {
         console.log("获取章节");
+        const res = (await apiGetChapter(chapterId.value))
+        form.title = res.data.title as string
+        form.content = res.data.content as string
       }
     };
 
     const onSubmit = async () => {
       if (isCreate.value) {
-        console.log("add");
-        await apiCreateChapter({ novel: novelId as string, ...form });
+        const { data: id } = await apiCreateChapter({ novel: novelId.value as string, ...form });
+        await router.replace(`/novels/${novelId.value}/${id}`)
+        chapterId.value = id
       } else {
-        console.log("update");
+        await apiUpdateChapter(chapterId.value, form)
       }
+      init()
     };
 
     onMounted(init);
