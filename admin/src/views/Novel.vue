@@ -20,6 +20,16 @@
           <el-checkbox v-for="opt in group.children" :key="opt._id" :label="opt._id">{{ opt.name }}</el-checkbox>
         </section>
       </el-checkbox-group>
+
+      <el-upload
+        class="avatar-uploader"
+        action="/upload"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+      >
+        <img v-if="form.cover" :src="form.cover" class="avatar" />
+        <el-icon v-else class="avatar-uploader-icon">+</el-icon>
+      </el-upload>
     </el-form>
   </section>
 
@@ -36,7 +46,11 @@
 
     <ol>
       <li v-for="item in form.chapters" :key="item._id">
-        <router-link :to="`/novels/${novelId}/${item._id}`">{{ item.title }}</router-link>
+        <router-link :to="`/novels/${novelId}/${item._id}`">
+          {{
+            item.title
+          }}
+        </router-link>
         <el-button @click="onRemoveChapter(item._id)">删除</el-button>
       </li>
     </ol>
@@ -49,19 +63,20 @@ import { useRoute, useRouter } from "vue-router";
 
 import { apiGetCategories } from "@/apis/category";
 import { apiGetNovelById, apiCreateNovel, apiUpdateNovel } from "@/apis/novel";
-import { apiRemoveChapter } from '@/apis/chapter'
+import { apiRemoveChapter } from "@/apis/chapter";
 
 interface Novel {
   name: string;
   author: string;
-  categories: string[]
+  categories: string[];
   chapters: { _id: string; title: string }[];
+  cover?: string;
 }
 
 interface Category {
-  _id: string
-  name: string
-  children: { _id: string, name: string }[]
+  _id: string;
+  name: string;
+  children: { _id: string; name: string }[];
 }
 
 export default defineComponent({
@@ -71,24 +86,40 @@ export default defineComponent({
     const novelId = ref(useRoute().params.novelId as string);
     const isCreate = computed(() => novelId.value === "new");
 
-    const categoryOptions = ref<Category[]>([])
+    const categoryOptions = ref<Category[]>([]);
     const form: Novel = reactive({
       name: "",
       author: "",
       categories: [],
       chapters: [],
+      cover: undefined
     });
 
     const init = async () => {
-      const { list: options } = await apiGetCategories({ pageSize: 1000 })
-      categoryOptions.value = options as unknown as Category[]
+      const { list: options } = await apiGetCategories({ pageSize: 1000 });
+      categoryOptions.value = (options as unknown) as Category[];
 
       if (!isCreate.value) {
         const { record } = await apiGetNovelById(novelId.value as string);
         form.name = record?.name as string;
         form.author = record.author as string;
         form.chapters = record.chapters as Novel["chapters"];
-        form.categories = record.categories as Novel['categories']
+        form.categories = record.categories as Novel["categories"];
+        form.cover = record.cover as Novel['cover']
+      }
+    };
+
+    const beforeAvatarUpload = (file: File) => {
+      console.log("ffff", file);
+
+      const isImage = file.type === "image/jpeg" || file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      return isImage && isLt2M;
+    };
+
+    const handleAvatarSuccess = (param: { url?: string }) => {
+      if (param && param.url) {
+        form.cover = param.url
       }
     };
 
@@ -107,13 +138,22 @@ export default defineComponent({
     };
 
     const onRemoveChapter = async (chapterId: string) => {
-      await apiRemoveChapter({ novelId: novelId.value, chapterId })
+      await apiRemoveChapter({ novelId: novelId.value, chapterId });
       await init();
-    }
+    };
 
     onMounted(init);
 
-    return { form, novelId, isCreate, categoryOptions, onSubmit, onRemoveChapter };
+    return {
+      form,
+      novelId,
+      isCreate,
+      categoryOptions,
+      onSubmit,
+      onRemoveChapter,
+      beforeAvatarUpload,
+      handleAvatarSuccess,
+    };
   },
 });
 </script>
