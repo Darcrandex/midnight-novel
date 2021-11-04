@@ -11,7 +11,7 @@
     <el-input v-model="form.title"></el-input>
   </section>
 
-  <TinyMceEditor />
+  <TinyMceEditor v-model="form.content" />
 </template>
 
 <script lang="ts">
