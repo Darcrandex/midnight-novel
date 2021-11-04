@@ -12,6 +12,14 @@
     <el-form v-model="form">
       <el-input v-model="form.name"></el-input>
       <el-input v-model="form.author"></el-input>
+
+      <el-checkbox-group v-model="form.categories">
+        <section v-for="group in categoryOptions" :key="group._id">
+          <p>{{ group.name }}</p>
+
+          <el-checkbox v-for="opt in group.children" :key="opt._id" :label="opt._id">{{ opt.name }}</el-checkbox>
+        </section>
+      </el-checkbox-group>
     </el-form>
   </section>
 
@@ -38,13 +46,22 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import { apiGetCategories } from "@/apis/category";
 import { apiGetNovelById, apiCreateNovel, apiUpdateNovel } from "@/apis/novel";
 import { apiRemoveChapter } from '@/apis/chapter'
 
 interface Novel {
   name: string;
   author: string;
+  categories: string[]
   chapters: { _id: string; title: string }[];
+}
+
+interface Category {
+  _id: string
+  name: string
+  children: { _id: string, name: string }[]
 }
 
 export default defineComponent({
@@ -53,18 +70,25 @@ export default defineComponent({
     const router = useRouter();
     const novelId = ref(useRoute().params.novelId as string);
     const isCreate = computed(() => novelId.value === "new");
+
+    const categoryOptions = ref<Category[]>([])
     const form: Novel = reactive({
       name: "",
       author: "",
+      categories: [],
       chapters: [],
     });
 
     const init = async () => {
+      const { list: options } = await apiGetCategories({ pageSize: 1000 })
+      categoryOptions.value = options as unknown as Category[]
+
       if (!isCreate.value) {
         const { record } = await apiGetNovelById(novelId.value as string);
         form.name = record?.name as string;
         form.author = record.author as string;
         form.chapters = record.chapters as Novel["chapters"];
+        form.categories = record.categories as Novel['categories']
       }
     };
 
@@ -89,7 +113,7 @@ export default defineComponent({
 
     onMounted(init);
 
-    return { form, novelId, isCreate, onSubmit, onRemoveChapter };
+    return { form, novelId, isCreate, categoryOptions, onSubmit, onRemoveChapter };
   },
 });
 </script>
