@@ -3,11 +3,10 @@ import { TypegooseModule } from 'nestjs-typegoose'
 import { DbService } from './db.service'
 import configuration from 'configuration'
 
-import { Category } from './models/category.model'
 import { Novel } from './models/novel.model'
 import { Chapter } from './models/chapter.model'
 
-const models = TypegooseModule.forFeature([Category, Novel, Chapter])
+const models = TypegooseModule.forFeature([Novel, Chapter])
 
 @Global()
 @Module({
