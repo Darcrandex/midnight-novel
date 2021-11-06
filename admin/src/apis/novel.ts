@@ -23,6 +23,7 @@ export async function apiRemoveNovel(id: string): Promise<void> {
 
 export async function apiGetNovels(): Promise<{
   list: Record<string, unknown>;
+  total: number;
 }> {
   const url = "/novel";
   return await http.get(url);

@@ -1,19 +1,38 @@
 <template>
-  <h1>NovelManagement</h1>
-
   <router-link to="/novels/new">
-    <el-button>
+    <el-button type="primary">
       新增小说
     </el-button>
   </router-link>
 
-  <ul>
-    <li v-for="novel in state.list" :key="novel._id">
-      <h2>{{ novel.name }}</h2>
-      <router-link :to="`/novels/${novel._id}`">{{ novel.name }}</router-link>
-      <el-button @click="remove(novel._id)">删除</el-button>
-    </li>
-  </ul>
+  <el-table :data="state.list" style="width: 100%" row-key="_id">
+    <el-table-column label="名称">
+      <template #default="scope">
+        <router-link :to="`/novels/${scope.row._id}`">
+          <el-link type="primary">
+            {{ scope.row.name }}
+          </el-link>
+        </router-link>
+      </template>
+    </el-table-column>
+    <el-table-column prop="author" label="作者" width="300" />
+    <el-table-column width="200" label="操作">
+      <template #default="scope">
+        <el-popconfirm title="真的要删除吗?" @confirm="remove(scope.row)">
+          <template #reference>
+            <el-button size="small">删除</el-button>
+          </template>
+        </el-popconfirm>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <el-pagination
+    layout="prev, pager, next"
+    :total="state.total"
+    v-model="state.page"
+    :hide-on-single-page="true"
+  ></el-pagination>
 </template>
 
 <script lang="ts">
@@ -29,14 +48,20 @@ export default defineComponent({
   name: "Novels",
 
   setup() {
-    const state: { list: Novel[] } = reactive({ list: [] });
+    const state: { list: Novel[]; total: number; page: number } = reactive({
+      list: [],
+      total: 0,
+      page: 1,
+    });
 
     const getList = async () => {
-      state.list = ((await apiGetNovels()).list as unknown) as Novel[];
+      const res = await apiGetNovels();
+      state.list = (res.list as unknown) as Novel[];
+      state.total = res.total;
     };
 
-    const remove = async (id: string) => {
-      await apiRemoveNovel(id);
+    const remove = async (recode: Novel) => {
+      await apiRemoveNovel(recode._id);
       await getList();
     };
 

@@ -4,57 +4,88 @@
     <el-breadcrumb-item>小说详情</el-breadcrumb-item>
   </el-breadcrumb>
 
-  <section>
-    <el-button @click="onSubmit">{{ isCreate ? "新增" : "更新" }}</el-button>
+  <section style="margin-top: 16px;">
+    <el-button @click="onSubmit" type="primary">
+      {{ isCreate ? "新增" : "更新" }}
+    </el-button>
   </section>
 
-  <section>
-    <el-form v-model="form">
+  <el-form label-width="5em" style="margin-top: 16px;">
+    <el-form-item label="名称">
       <el-input v-model="form.name"></el-input>
+    </el-form-item>
+    <el-form-item label="作者">
       <el-input v-model="form.author"></el-input>
-
+    </el-form-item>
+    <el-form-item label="分类">
       <el-checkbox-group v-model="form.categories">
         <section v-for="group in categoryOptions" :key="group._id">
-          <p>{{ group.name }}</p>
-
-          <el-checkbox v-for="opt in group.children" :key="opt._id" :label="opt._id">{{ opt.name }}</el-checkbox>
+          <p class="categories-group-name">
+            <span>{{ group.name }}</span>
+          </p>
+          <el-checkbox
+            v-for="opt in group.children"
+            :key="opt._id"
+            :label="opt._id"
+            >{{ opt.name }}</el-checkbox
+          >
         </section>
       </el-checkbox-group>
+    </el-form-item>
 
+    <el-form-item label="封面">
       <el-upload
-        class="avatar-uploader"
+        style="display: inline-block; margin-right: 16px; vertical-align: top;"
         action="/upload"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
       >
-        <img v-if="form.cover" :src="form.cover" class="avatar" />
-        <el-icon v-else class="avatar-uploader-icon">+</el-icon>
+        <div class="upload-wrapper">
+          <el-icon class="el-icon-camera"></el-icon>
+        </div>
       </el-upload>
-    </el-form>
-  </section>
 
-  <section v-show="isCreate">
-    <h2>章节</h2>
-    <p>请先重建小说</p>
-  </section>
+      <el-image
+        v-if="form.cover"
+        style="width: 100px; height: 100px"
+        :src="form.cover"
+        fit="cover"
+        :preview-src-list="[form.cover]"
+      ></el-image>
+    </el-form-item>
 
-  <section v-show="!isCreate">
-    <h2>章节</h2>
-    <router-link :to="`/novels/${novelId}/new`">
-      <el-button>新增章节</el-button>
-    </router-link>
+    <el-form-item label="章节">
+      <router-link :to="`/novels/${novelId}/new`">
+        <el-button type="primary" :disabled="isCreate">
+          新增章节
+        </el-button>
+      </router-link>
 
-    <ol>
-      <li v-for="item in form.chapters" :key="item._id">
-        <router-link :to="`/novels/${novelId}/${item._id}`">
-          {{
-            item.title
-          }}
-        </router-link>
-        <el-button @click="onRemoveChapter(item._id)">删除</el-button>
-      </li>
-    </ol>
-  </section>
+      <el-table :data="form.chapters" style="width: 100%" row-key="_id">
+        <el-table-column label="名称">
+          <template #default="scope">
+            <router-link :to="`/novels/${novelId}/${scope.row._id}`">
+              <el-link type="primary">
+                {{ scope.row.title }}
+              </el-link>
+            </router-link>
+          </template>
+        </el-table-column>
+        <el-table-column width="200" label="操作">
+          <template #default="scope">
+            <el-popconfirm
+              title="真的要删除吗?"
+              @confirm="onRemoveChapter(scope.row._id)"
+            >
+              <template #reference>
+                <el-button size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script lang="ts">
@@ -92,7 +123,7 @@ export default defineComponent({
       author: "",
       categories: [],
       chapters: [],
-      cover: undefined
+      cover: undefined,
     });
 
     const init = async () => {
@@ -105,13 +136,11 @@ export default defineComponent({
         form.author = record.author as string;
         form.chapters = record.chapters as Novel["chapters"];
         form.categories = record.categories as Novel["categories"];
-        form.cover = record.cover as Novel['cover']
+        form.cover = record.cover as Novel["cover"];
       }
     };
 
     const beforeAvatarUpload = (file: File) => {
-      console.log("ffff", file);
-
       const isImage = file.type === "image/jpeg" || file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
       return isImage && isLt2M;
@@ -119,7 +148,7 @@ export default defineComponent({
 
     const handleAvatarSuccess = (param: { url?: string }) => {
       if (param && param.url) {
-        form.cover = param.url
+        form.cover = param.url;
       }
     };
 
@@ -157,3 +186,37 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.upload-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fbfdff;
+  border: 1px dashed #c0ccda;
+  border-radius: 6px;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  vertical-align: top;
+
+  &:hover {
+    border-color: skyblue;
+  }
+
+  .el-icon {
+    font-size: 40px;
+    color: #e0e0e0;
+  }
+}
+
+.categories-group-name {
+  margin-top: 10px;
+  margin-bottom: 0;
+  line-height: 1.5;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
+}
+</style>
