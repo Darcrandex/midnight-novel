@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
 } from '@nestjs/common'
 import { Novel } from '@app/db/models/novel.model'
 import { InjectModel } from 'nestjs-typegoose'
@@ -42,17 +43,31 @@ export class NovelController {
   }
 
   @Get()
-  async findByPage() {
-    const list = await this.novelModel.find().populate('chapters').exec()
+  async findAll(@Query() query: { page: string }) {
+    const page = parseInt(query.page)
+    const size = 10
+
+    const list = await this.novelModel
+      .find()
+      .skip((page - 1) * size)
+      .limit(size)
+      .populate('chapters', '-content')
+      .exec()
+
+    const total = await this.novelModel.count()
     return {
       code: 2000,
       list,
+      total,
     }
   }
 
   @Get(':id')
   async find(@Param('id') id: string) {
-    const record = await this.novelModel.findById(id).populate('chapters')
+    const record = await this.novelModel
+      .findById(id)
+      .populate('chapters', '-content')
+      .exec()
     return {
       code: 2000,
       record,
