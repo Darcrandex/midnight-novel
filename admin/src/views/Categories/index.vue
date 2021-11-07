@@ -1,76 +1,66 @@
 <template>
-  <Edit @submit="handleCreate" />
+  <EditModal @submit="handleCreate">
+    <template #default="{onClick}">
+      <el-button type="primary" @click="onClick">新增分类</el-button>
+    </template>
+  </EditModal>
 
-  <div v-for="group in state.list" :key="group._id">
-    <h2>{{ group.name }}</h2>
-    <Edit @submit="handleUpdate" :data="group" />
-    <el-button @click="handleRemove(group._id)">删除</el-button>
+  <el-table :data="list">
+    <el-table-column label="分组" width="220">
+      <template #default="scope">
+        {{ scope.row.name }}
+      </template>
+    </el-table-column>
+    <el-table-column label="子分类">
+      <template #default="scope">
+        {{ scope.row.children?.map((v:{name:String}) => v.name).join('，') }}
+      </template>
+    </el-table-column>
 
-    <el-row :gutter="20">
-      <el-col
-        :span="6"
-        v-for="(item, idx) in group.children"
-        :key="`${idx}-${item.name}`"
-      >
-        <div>{{ item.name }}</div>
-      </el-col>
-    </el-row>
+    <el-table-column label="操作" width="200">
+      <template #default="scope">
+        <EditModal :data="scope.row" @submit="handleUpdate">
+          <template #default="{onClick}">
+            <el-button size="small" @click="onClick">编辑</el-button>
+          </template>
+        </EditModal>
 
-    <el-divider></el-divider>
-  </div>
+        <el-popconfirm title="真的要删除吗?" @confirm="handleRemove(scope.row._id)">
+          <template #reference>
+            <el-button size="small">删除</el-button>
+          </template>
+        </el-popconfirm>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, onMounted } from "vue";
-import Edit from "./Edit.vue";
-import {
-  apiGetCategories,
-  apiCreateCategory,
-  apiUpdateCategory,
-  apiRemoveCategory,
-} from "@/apis/category";
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import EditModal, { Category } from './EditModal.vue'
+import { apiGetCategories, apiCreateCategory, apiUpdateCategory, apiRemoveCategory } from '@/apis/category'
 
-interface State {
-  list: { _id: string; name: string; children: { name: string }[] }[];
-  total: number;
+const list = ref<Category[]>([])
+
+const getList = async () => {
+  const res = await apiGetCategories()
+  list.value = (res.list as unknown) as Category[]
 }
 
-export default defineComponent({
-  name: "Categories",
-  components: { Edit },
+const handleCreate = async (payload: Category) => {
+  await apiCreateCategory({ name: payload.name, children: payload.children })
+  await getList()
+}
 
-  setup() {
-    const state: State = reactive({
-      list: [],
-      total: 0,
-    });
+const handleUpdate = async (payload: Category) => {
+  await apiUpdateCategory(payload._id, { name: payload.name, children: payload.children })
+  await getList()
+}
 
-    const getList = async () => {
-      const res = await apiGetCategories();
-      state.list = res.list as State["list"];
-      state.total = res.total;
-    };
+const handleRemove = async (id: string) => {
+  await apiRemoveCategory(id)
+  await getList()
+}
 
-    const handleCreate = async (payload = {}) => {
-      await apiCreateCategory(payload);
-      await getList();
-    };
-
-    const handleUpdate = async (id: string, payload = {}) => {
-      await apiUpdateCategory(id, payload);
-      await getList();
-    };
-
-    const handleRemove = async (id: string) => {
-      await apiRemoveCategory(id);
-      await getList();
-    };
-
-    onMounted(async () => {
-      getList();
-    });
-
-    return { state, handleCreate, handleUpdate, handleRemove };
-  },
-});
+onMounted(getList)
 </script>
