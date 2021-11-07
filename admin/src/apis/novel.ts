@@ -21,12 +21,14 @@ export async function apiRemoveNovel(id: string): Promise<void> {
   return await http.delete(url);
 }
 
-export async function apiGetNovels(): Promise<{
+export async function apiGetNovels(params?: {
+  page?: number;
+}): Promise<{
   list: Record<string, unknown>;
   total: number;
 }> {
   const url = "/novel";
-  return await http.get(url);
+  return await http.get(url, { params });
 }
 
 export async function apiGetNovelById(

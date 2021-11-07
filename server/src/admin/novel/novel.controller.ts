@@ -64,10 +64,7 @@ export class NovelController {
 
   @Get(':id')
   async find(@Param('id') id: string) {
-    const record = await this.novelModel
-      .findById(id)
-      .populate('chapters', '-content')
-      .exec()
+    const record = await this.novelModel.findById(id).select('-chapters').exec()
     return {
       code: 2000,
       record,

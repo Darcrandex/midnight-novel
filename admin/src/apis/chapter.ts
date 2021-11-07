@@ -9,12 +9,9 @@ export async function apiCreateChapter(params: {
   return await http.post(url, params);
 }
 
-export async function apiRemoveChapter(params: {
-  novelId: string;
-  chapterId: string;
-}): Promise<void> {
+export async function apiRemoveChapter(chapterId: string): Promise<void> {
   const url = "/chapter";
-  return await http.delete(url, { params });
+  return await http.delete(url, { params: { id: chapterId } });
 }
 
 export async function apiGetChapter(
@@ -30,4 +27,16 @@ export async function apiUpdateChapter(
 ): Promise<void> {
   const url = `/chapter/${id}`;
   return await http.patch(url, params);
+}
+
+export async function apiGetChapterByNovel(params: {
+  nid: string;
+  page: number;
+  pageSize?: number;
+}): Promise<{
+  list: Record<string, unknown>[];
+  total: number;
+}> {
+  const url = "/chapter";
+  return await http.get(url, { params });
 }

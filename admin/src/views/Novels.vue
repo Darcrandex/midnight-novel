@@ -30,8 +30,9 @@
   <el-pagination
     layout="prev, pager, next"
     :total="state.total"
-    v-model="state.page"
+    v-model:currentPage="state.page"
     :hide-on-single-page="true"
+    @current-change="getList"
   ></el-pagination>
 </template>
 
@@ -54,8 +55,8 @@ export default defineComponent({
       page: 1,
     });
 
-    const getList = async () => {
-      const res = await apiGetNovels();
+    const getList = async (page?: number) => {
+      const res = await apiGetNovels({ page: page || state.page });
       state.list = (res.list as unknown) as Novel[];
       state.total = res.total;
     };
@@ -67,7 +68,7 @@ export default defineComponent({
 
     onMounted(getList);
 
-    return { state, remove };
+    return { state, getList, remove };
   },
 });
 </script>

@@ -61,7 +61,7 @@
         </el-button>
       </router-link>
 
-      <el-table :data="form.chapters" style="width: 100%" row-key="_id">
+      <el-table :data="chapters.list" style="width: 100%" row-key="_id">
         <el-table-column label="名称">
           <template #default="scope">
             <router-link :to="`/novels/${novelId}/${scope.row._id}`">
@@ -84,6 +84,16 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        style="margin-top: 16px;"
+        layout="prev, pager, next"
+        :page-size="chapters.pageSize"
+        :total="chapters.total"
+        :hide-on-single-page="true"
+        v-model:currentPage="chapters.page"
+        @current-change="getChapters"
+      ></el-pagination>
     </el-form-item>
   </el-form>
 </template>
@@ -94,14 +104,18 @@ import { useRoute, useRouter } from "vue-router";
 
 import { apiGetCategories } from "@/apis/category";
 import { apiGetNovelById, apiCreateNovel, apiUpdateNovel } from "@/apis/novel";
-import { apiRemoveChapter } from "@/apis/chapter";
+import { apiRemoveChapter, apiGetChapterByNovel } from "@/apis/chapter";
 
 interface Novel {
   name: string;
   author: string;
   categories: string[];
-  chapters: { _id: string; title: string }[];
   cover?: string;
+}
+
+interface Chapter {
+  _id: string;
+  title: string;
 }
 
 interface Category {
@@ -118,13 +132,36 @@ export default defineComponent({
     const isCreate = computed(() => novelId.value === "new");
 
     const categoryOptions = ref<Category[]>([]);
+
     const form: Novel = reactive({
       name: "",
       author: "",
       categories: [],
-      chapters: [],
       cover: undefined,
     });
+
+    const chapters: {
+      page: number;
+      pageSize: number;
+      total: number;
+      list: Chapter[];
+    } = reactive({
+      page: 1,
+      pageSize: 4,
+      list: [],
+      total: 0,
+    });
+
+    const getChapters = async (page?: number) => {
+      const { list, total } = await apiGetChapterByNovel({
+        nid: novelId.value,
+        page: page || chapters.page,
+        pageSize: chapters.pageSize,
+      });
+
+      chapters.list = (list as unknown) as Chapter[];
+      chapters.total = total;
+    };
 
     const init = async () => {
       const { list: options } = await apiGetCategories({ pageSize: 1000 });
@@ -134,9 +171,10 @@ export default defineComponent({
         const { record } = await apiGetNovelById(novelId.value as string);
         form.name = record?.name as string;
         form.author = record.author as string;
-        form.chapters = record.chapters as Novel["chapters"];
-        form.categories = record.categories as Novel["categories"];
         form.cover = record.cover as Novel["cover"];
+        form.categories = record.categories as Novel["categories"];
+
+        await getChapters();
       }
     };
 
@@ -167,7 +205,7 @@ export default defineComponent({
     };
 
     const onRemoveChapter = async (chapterId: string) => {
-      await apiRemoveChapter({ novelId: novelId.value, chapterId });
+      await apiRemoveChapter(chapterId);
       await init();
     };
 
@@ -175,6 +213,7 @@ export default defineComponent({
 
     return {
       form,
+      chapters,
       novelId,
       isCreate,
       categoryOptions,
@@ -182,6 +221,7 @@ export default defineComponent({
       onRemoveChapter,
       beforeAvatarUpload,
       handleAvatarSuccess,
+      getChapters,
     };
   },
 });
