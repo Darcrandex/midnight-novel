@@ -25,6 +25,8 @@ export class CategoryController {
     return { code: 2000, data: record._id }
   }
 
+  // 目前更新或删除分类时,会导致小说关联的分类无效
+  // 目前的做法是,使用定时任务,定期清除已经失效的分类,并更新小说的分类字段值
   @Patch(':id')
   async update(
     @Param('id') id: string,
