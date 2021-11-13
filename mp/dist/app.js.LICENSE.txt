@@ -1,5 +1,0 @@
-/*!
-* @nutui/nutui-taro v3.1.10 Fri Nov 05 2021 19:54:46 GMT+0800 (中国标准时间)
-* (c) 2021 @jdf2e.
-* Released under the MIT License.
-*/

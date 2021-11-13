@@ -1,11 +1,25 @@
 export default {
   pages: [
-    'pages/index/index'
+    "pages/bookrack/index",
+    "pages/library/index",
+    "pages/rank/index",
+    "pages/category/index",
+    "pages/mine/index",
   ],
   window: {
-    backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
-  }
-}
+    backgroundTextStyle: "light",
+    navigationBarBackgroundColor: "#fff",
+    navigationBarTitleText: "WeChat",
+    navigationBarTextStyle: "black",
+  },
+
+  tabBar: {
+    list: [
+      { pagePath: "pages/bookrack/index", text: "bookrack" },
+      { pagePath: "pages/library/index", text: "library" },
+      { pagePath: "pages/rank/index", text: "rank" },
+      { pagePath: "pages/category/index", text: "category" },
+      { pagePath: "pages/mine/index", text: "mine" },
+    ],
+  },
+};
