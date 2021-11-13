@@ -6,6 +6,7 @@ export default {
     "pages/category/index",
     "pages/mine/index",
   ],
+
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",
