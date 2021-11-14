@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { reactive, onMounted } from "vue";
+import { get } from "../../utils/http";
 
 interface Category {
   _id: string;
@@ -30,17 +31,8 @@ interface Category {
 const categoryData = reactive<{ list: Category[] }>({ list: [] });
 
 const getList = async () => {
-  const list = Array(5)
-    .fill(0)
-    .map((_, i) => ({
-      _id: `g-${i}`,
-      name: `剧情${i}`,
-      children: Array(9)
-        .fill(0)
-        .map((_, j) => ({ _id: `c-${j}`, name: `言情${j}` })),
-    }));
-
-  categoryData.list = list;
+  const res = await get<{ list: Category[] }>("/category");
+  categoryData.list = res.list;
 };
 
 onMounted(getList);
