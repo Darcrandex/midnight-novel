@@ -20,18 +20,13 @@ export class CategoryController {
   ) {}
 
   @Post()
-  async create(@Body() dto: { name: string }) {
+  async create(@Body() dto: Partial<Category>) {
     const record = await this.categoryModel.create(dto)
     return { code: 2000, data: record._id }
   }
 
-  // 目前更新或删除分类时,会导致小说关联的分类无效
-  // 目前的做法是,使用定时任务,定期清除已经失效的分类,并更新小说的分类字段值
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() dto: { name?: string; children?: { name: string }[] },
-  ) {
+  async update(@Param('id') id: string, @Body() dto: Partial<Category>) {
     await this.categoryModel.findByIdAndUpdate(id, dto)
     return { code: 2000, data: null }
   }
@@ -50,6 +45,7 @@ export class CategoryController {
       .find()
       .skip((page - 1) * limit)
       .limit(limit)
+      .populate('kind')
       .exec()
     const total = await this.categoryModel.count()
     return { code: 2000, msg: 'ok', list, total }
@@ -58,6 +54,6 @@ export class CategoryController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const record = await this.categoryModel.findById(id)
-    return { data: record || null }
+    return { code: 2000, data: record || null }
   }
 }

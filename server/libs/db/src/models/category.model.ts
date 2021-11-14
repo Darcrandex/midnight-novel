@@ -1,17 +1,14 @@
-import { Prop } from '@typegoose/typegoose'
+import { Prop, Ref } from '@typegoose/typegoose'
+import { Kind } from './kind.model'
 
-// 子分类
-// 属于一个子节点
-// 不会生成一个表
-export class SubCategory {
-  @Prop()
-  name: string
-}
-
+// 分类
 export class Category {
   @Prop({ required: true })
   name!: string
 
-  @Prop({ type: () => SubCategory })
-  children: SubCategory[]
+  @Prop()
+  description?: string
+
+  @Prop({ ref: () => Kind })
+  kind: Ref<Kind>
 }

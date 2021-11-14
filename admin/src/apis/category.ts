@@ -1,30 +1,47 @@
-import http from "@/utils/http";
+import http from '@/utils/http'
+import { Kind, Category } from '@/interface/data-model'
 
-export async function apiGetCategories(params?: {
-  page?: number;
-  pageSize?: number;
-}): Promise<{ list: Record<string, unknown>[]; total: number }> {
-  const url = "/category";
-  return await http.get(url, { params });
+// 种类
+// 创建/更新 种类
+export async function apiUpdateKind(params: Kind): Promise<void> {
+  const { _id, name, description } = params
+  if (_id) {
+    return await http.patch(`/kind/${_id}`, { name, description })
+  } else {
+    return await http.post('/kind', { name, description })
+  }
 }
 
-export async function apiCreateCategory(params: {
-  name?: string;
-  children?: { name: string }[];
-}): Promise<string> {
-  const url = "/category";
-  return await http.post(url, params);
+// 删除种类
+export async function apiRemoveKind(id: string): Promise<string> {
+  return await http.delete(`/kind/${id}`)
 }
 
-export async function apiUpdateCategory(
-  id: string,
-  params: { name?: string; children?: { name: string }[] }
-): Promise<unknown> {
-  const url = `/category/${id}`;
-  return await http.patch(url, params);
+// 获取种类列表
+export async function apiGetKinds(): Promise<{ list: Kind[] }> {
+  const url = '/kind'
+  return await http.get(url)
+}
+
+// 分类
+// 获取分类列表
+export async function apiGetCategories(params?: { page?: number; pageSize?: number }): Promise<{ list: Category[]; total: number }> {
+  const url = '/category'
+  return await http.get(url, { params })
+}
+
+export async function apiCreateCategory(params: Category): Promise<string> {
+  const url = '/category'
+  return await http.post(url, params)
+}
+
+export async function apiUpdateCategory(params: Category): Promise<unknown> {
+  const { _id, ...rest } = params
+  const url = `/category/${_id}`
+  return await http.patch(url, { ...rest })
 }
 
 export async function apiRemoveCategory(id: string): Promise<void> {
-  const url = `/category/${id}`;
-  return await http.delete(url);
+  const url = `/category/${id}`
+  return await http.delete(url)
 }
