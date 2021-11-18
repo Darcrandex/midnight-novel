@@ -6,7 +6,7 @@
 
   <section style="margin-top: 16px;">
     <el-button @click="onSubmit" type="primary">
-      {{ isCreate ? "新增" : "更新" }}
+      {{ isCreate ? '新增' : '更新' }}
     </el-button>
   </section>
 
@@ -19,16 +19,11 @@
     </el-form-item>
     <el-form-item label="分类">
       <el-checkbox-group v-model="form.categories">
-        <section v-for="group in categoryOptions" :key="group._id">
+        <section v-for="group in kinds" :key="group._id">
           <p class="categories-group-name">
             <span>{{ group.name }}</span>
           </p>
-          <el-checkbox
-            v-for="opt in group.children"
-            :key="opt._id"
-            :label="opt._id"
-            >{{ opt.name }}</el-checkbox
-          >
+          <el-checkbox v-for="opt in group.categories" :key="opt._id" :label="opt._id">{{ opt.name }}</el-checkbox>
         </section>
       </el-checkbox-group>
     </el-form-item>
@@ -45,21 +40,13 @@
         </div>
       </el-upload>
 
-      <el-image
-        v-if="form.cover"
-        style="width: 100px; height: 100px"
-        :src="form.cover"
-        fit="cover"
-        :preview-src-list="[form.cover]"
-      ></el-image>
+      <el-image v-if="form.cover" style="width: 100px; height: 100px" :src="form.cover" fit="cover" :preview-src-list="[form.cover]"></el-image>
     </el-form-item>
 
     <el-form-item label="章节">
-      <router-link :to="`/novels/${novelId}/new`">
-        <el-button type="primary" :disabled="isCreate">
-          新增章节
-        </el-button>
-      </router-link>
+      <el-button type="primary" :disabled="isCreate" @click="$router.push(`/novels/${novelId}/new`)">
+        新增章节
+      </el-button>
 
       <el-table :data="chapters.list" style="width: 100%" row-key="_id">
         <el-table-column label="名称">
@@ -73,10 +60,7 @@
         </el-table-column>
         <el-table-column width="200" label="操作">
           <template #default="scope">
-            <el-popconfirm
-              title="真的要删除吗?"
-              @confirm="onRemoveChapter(scope.row._id)"
-            >
+            <el-popconfirm title="真的要删除吗?" @confirm="onRemoveChapter(scope.row._id)">
               <template #reference>
                 <el-button size="small">删除</el-button>
               </template>
@@ -98,133 +82,84 @@
   </el-form>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, reactive, computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+<script setup lang="ts">
+import { reactive, ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { Novel, Kind, Chapter } from '@/interface/data-model'
+import { apiGetKinds } from '@/apis/category'
+import { apiGetNovelById, apiCreateNovel, apiUpdateNovel } from '@/apis/novel'
+import { apiGetChapterByNovel, apiRemoveChapter } from '@/apis/chapter'
 
-import { apiGetCategories } from "@/apis/category";
-import { apiGetNovelById, apiCreateNovel, apiUpdateNovel } from "@/apis/novel";
-import { apiRemoveChapter, apiGetChapterByNovel } from "@/apis/chapter";
+const router = useRouter()
+const novelId = ref<string>('')
+const isCreate = computed(() => novelId.value === 'new')
 
-interface Novel {
-  name: string;
-  author: string;
-  categories: string[];
-  cover?: string;
+const kinds = ref<Kind[]>([])
+
+const form = reactive<Novel>({
+  name: '',
+  author: '',
+  categories: [],
+  cover: undefined
+})
+
+const chapters = reactive<{ list: Chapter[]; total: number; page: number; pageSize: number }>({
+  list: [],
+  total: 0,
+  page: 1,
+  pageSize: 5
+})
+
+const getChapters = async (page?: number) => {
+  const { list, total } = await apiGetChapterByNovel({ nid: novelId.value, page: page || chapters.page })
+  chapters.list = list
+  chapters.total = total
 }
 
-interface Chapter {
-  _id: string;
-  title: string;
+const onRemoveChapter = async (chapterId: string) => {
+  await apiRemoveChapter(chapterId)
+  await init()
 }
 
-interface Category {
-  _id: string;
-  name: string;
-  children: { _id: string; name: string }[];
+const init = async () => {
+  // 获取路由参数
+  novelId.value = router.currentRoute.value.params.novelId as string
+
+  // 选项
+  const { list } = await apiGetKinds()
+  kinds.value = list
+
+  if (!isCreate.value) {
+    const { record } = await apiGetNovelById(novelId.value)
+    form.name = record.name
+    form.author = record.author
+    form.categories = record.categories
+    form.cover = record.cover
+    await getChapters()
+  }
 }
 
-export default defineComponent({
-  name: "Novel",
-  setup() {
-    const router = useRouter();
-    const novelId = ref(useRoute().params.novelId as string);
-    const isCreate = computed(() => novelId.value === "new");
+const handleAvatarSuccess = (param: { url?: string }) => {
+  if (param && param.url) {
+    form.cover = param.url
+  }
+}
 
-    const categoryOptions = ref<Category[]>([]);
+const onSubmit = async () => {
+  if (isCreate.value) {
+    const { id: recordId } = await apiCreateNovel(form)
 
-    const form: Novel = reactive({
-      name: "",
-      author: "",
-      categories: [],
-      cover: undefined,
-    });
+    await router.replace(`/novels/${recordId}`)
+  } else {
+    await apiUpdateNovel(novelId.value, form)
+  }
 
-    const chapters: {
-      page: number;
-      pageSize: number;
-      total: number;
-      list: Chapter[];
-    } = reactive({
-      page: 1,
-      pageSize: 4,
-      list: [],
-      total: 0,
-    });
+  await init()
+}
 
-    const getChapters = async (page?: number) => {
-      const { list, total } = await apiGetChapterByNovel({
-        nid: novelId.value,
-        page: page || chapters.page,
-        pageSize: chapters.pageSize,
-      });
-
-      chapters.list = (list as unknown) as Chapter[];
-      chapters.total = total;
-    };
-
-    const init = async () => {
-      const { list: options } = await apiGetCategories({ pageSize: 1000 });
-      categoryOptions.value = (options as unknown) as Category[];
-
-      if (!isCreate.value) {
-        const { record } = await apiGetNovelById(novelId.value as string);
-        form.name = record?.name as string;
-        form.author = record.author as string;
-        form.cover = record.cover as Novel["cover"];
-        form.categories = record.categories as Novel["categories"];
-
-        await getChapters();
-      }
-    };
-
-    const beforeAvatarUpload = (file: File) => {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      return isImage && isLt2M;
-    };
-
-    const handleAvatarSuccess = (param: { url?: string }) => {
-      if (param && param.url) {
-        form.cover = param.url;
-      }
-    };
-
-    const onSubmit = async () => {
-      if (isCreate.value) {
-        const { id: recordId } = await apiCreateNovel(form);
-
-        // 用于解决路由刷新的问题
-        novelId.value = recordId;
-        await router.replace(`/novels/${recordId}`);
-      } else {
-        await apiUpdateNovel(novelId.value as string, form);
-      }
-
-      await init();
-    };
-
-    const onRemoveChapter = async (chapterId: string) => {
-      await apiRemoveChapter(chapterId);
-      await init();
-    };
-
-    onMounted(init);
-
-    return {
-      form,
-      chapters,
-      novelId,
-      isCreate,
-      categoryOptions,
-      onSubmit,
-      onRemoveChapter,
-      beforeAvatarUpload,
-      handleAvatarSuccess,
-      getChapters,
-    };
-  },
-});
+onMounted(() => {
+  init()
+})
 </script>
 
 <style lang="scss" scoped>

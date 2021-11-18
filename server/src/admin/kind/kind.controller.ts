@@ -38,7 +38,8 @@ export class KindController {
 
   @Get()
   async findAll() {
-    const list = await this.kindModel.find().exec()
+    // 通过关联,查询下级的分类
+    const list = await this.kindModel.find().populate('categories').exec()
     return { code: 2000, list }
   }
 }
