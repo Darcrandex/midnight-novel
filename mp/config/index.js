@@ -16,6 +16,17 @@ const config = {
       path.resolve(__dirname, "..", "src/assets/styles/custom_theme.scss"),
     ],
   },
+
+  // 资源路径别名
+  alias: {
+    "@/components": path.resolve(__dirname, "..", "src/components"),
+    "@/pages": path.resolve(__dirname, "..", "src/pages"),
+    "@/interface": path.resolve(__dirname, "..", "src/interface"),
+    "@/utils": path.resolve(__dirname, "..", "src/utils"),
+    "@/package": path.resolve(__dirname, "..", "package.json"),
+    "@/project": path.resolve(__dirname, "..", "project.config.json"),
+  },
+
   sourceRoot: "src",
   outputRoot: "dist",
   plugins: ["@tarojs/plugin-html"],

@@ -1,6 +1,6 @@
 <template>
-  <section v-for="group in categoryData.list" :key="group._id">
-    <div :class="$style.category_group_name">
+  <section v-for="group in data.kinds" :key="group._id">
+    <div :class="$style.kind_name">
       <i :class="$style.line"></i>
       <span :class="$style.text">{{ group.name }}</span>
       <i :class="$style.line"></i>
@@ -8,7 +8,7 @@
 
     <section :class="$style.category_group">
       <div
-        v-for="item in group.children"
+        v-for="item in group.categories"
         :key="item._id"
         :class="$style.category_item"
       >
@@ -20,19 +20,14 @@
 
 <script setup lang="ts">
 import { reactive, onMounted } from "vue";
-import { get } from "../../utils/http";
+import { Kind } from "@/interface/data-model";
+import { get } from "@/utils/http";
 
-interface Category {
-  _id: string;
-  name: string;
-  children: { _id: string; name: string }[];
-}
-
-const categoryData = reactive<{ list: Category[] }>({ list: [] });
+const data = reactive<{ kinds: Kind[] }>({ kinds: [] });
 
 const getList = async () => {
-  const res = await get<{ list: Category[] }>("/category");
-  categoryData.list = res.list;
+  const res = await get<{ list: Kind[] }>("/kind");
+  data.kinds = res.list;
 };
 
 onMounted(getList);
@@ -40,7 +35,7 @@ onMounted(getList);
 
 <style lang="scss" module>
 $spacing: 8px;
-.category_group_name {
+.kind_name {
   display: flex;
   align-items: center;
   justify-content: center;

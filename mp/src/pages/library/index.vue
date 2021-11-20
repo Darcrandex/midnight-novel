@@ -1,11 +1,44 @@
-<template>
-  <h1>library</h1>
-</template>
+<script setup lang="ts">
+/**
+ * @name Libray
+ * @author darcrand
+ * @description 书城
+ */
 
-<script lang="ts">
-import { defineComponent } from "vue";
+import { onMounted } from "vue";
+import { get } from "@/utils/http";
 
-export default defineComponent({
-  name: "library",
+import TopSearch from "./TopSearch.vue";
+import Banner from "./Banner.vue";
+import BlockNavs from "./BlockNavs.vue";
+import Recommend from "./Recommend.vue";
+import Ranks from "./Ranks.vue";
+import New from "./New.vue";
+import Finished from "./Finished.vue";
+import Good from "./Good.vue";
+import TopOfCategory from "./TopOfCategory.vue";
+import List from "./List.vue";
+
+const init = async () => {
+  console.log("get", get);
+  await get("/novel");
+};
+
+onMounted(() => {
+  console.log("inited");
+  init();
 });
 </script>
+
+<template>
+  <TopSearch />
+  <Banner />
+  <BlockNavs />
+  <Recommend />
+  <Ranks />
+  <New />
+  <Finished />
+  <Good />
+  <TopOfCategory />
+  <List />
+</template>
