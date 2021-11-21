@@ -14,15 +14,20 @@ const config = {
     // 修改默认主题
     resource: [
       path.resolve(__dirname, "..", "src/assets/styles/custom_theme.scss"),
+      path.resolve(__dirname, "..", "src/assets/styles/variables.scss"),
+      path.resolve(__dirname, "..", "src/assets/styles/mixins.scss"),
     ],
   },
 
   // 资源路径别名
   alias: {
+    "@/apis": path.resolve(__dirname, "..", "src/apis"),
+    "@/assets": path.resolve(__dirname, "..", "src/assets"),
     "@/components": path.resolve(__dirname, "..", "src/components"),
-    "@/pages": path.resolve(__dirname, "..", "src/pages"),
     "@/interface": path.resolve(__dirname, "..", "src/interface"),
+    "@/pages": path.resolve(__dirname, "..", "src/pages"),
     "@/utils": path.resolve(__dirname, "..", "src/utils"),
+
     "@/package": path.resolve(__dirname, "..", "package.json"),
     "@/project": path.resolve(__dirname, "..", "project.config.json"),
   },

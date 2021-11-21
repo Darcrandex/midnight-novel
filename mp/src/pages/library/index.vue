@@ -18,10 +18,11 @@ import Finished from "./Finished.vue";
 import Good from "./Good.vue";
 import TopOfCategory from "./TopOfCategory.vue";
 import List from "./List.vue";
+import Excellent from "./Excellent.vue";
 
 const init = async () => {
   console.log("get", get);
-  await get("/novel");
+  // await get("/novel");
 };
 
 onMounted(() => {
@@ -36,6 +37,7 @@ onMounted(() => {
   <BlockNavs />
   <Recommend />
   <Ranks />
+  <Excellent />
   <New />
   <Finished />
   <Good />

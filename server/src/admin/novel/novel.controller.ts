@@ -51,6 +51,7 @@ export class NovelController {
       .find()
       .skip((page - 1) * size)
       .limit(size)
+      .populate('categories')
       .populate('chapters', '-content')
       .exec()
 
