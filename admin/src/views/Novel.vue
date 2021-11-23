@@ -17,6 +17,12 @@
     <el-form-item label="作者">
       <el-input v-model="form.author"></el-input>
     </el-form-item>
+    <el-form-item label="简介">
+      <el-input v-model="form.description" type="textarea" :rows="6"></el-input>
+    </el-form-item>
+    <el-form-item label="主角">
+      <el-input v-model="form.protagonist"></el-input>
+    </el-form-item>
     <el-form-item label="分类">
       <el-checkbox-group v-model="form.categories">
         <section v-for="group in kinds" :key="group._id">
@@ -100,7 +106,9 @@ const form = reactive<Novel>({
   name: '',
   author: '',
   categories: [],
-  cover: undefined
+  cover: undefined,
+  description: undefined,
+  protagonist: undefined
 })
 
 const chapters = reactive<{ list: Chapter[]; total: number; page: number; pageSize: number }>({
@@ -135,6 +143,8 @@ const init = async () => {
     form.author = record.author
     form.categories = record.categories
     form.cover = record.cover
+    form.description = record.description
+    form.protagonist = record.protagonist
     await getChapters()
   }
 }

@@ -19,6 +19,8 @@ export interface Novel {
   author: string
   categories: string[]
   cover?: string
+  description?: string
+  protagonist?: string
 }
 
 export interface Chapter {

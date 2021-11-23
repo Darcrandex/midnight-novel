@@ -15,6 +15,7 @@
         </router-link>
       </template>
     </el-table-column>
+    <el-table-column prop="protagonist" label="主角" />
     <el-table-column prop="author" label="作者" width="300" />
     <el-table-column width="200" label="操作">
       <template #default="scope">
@@ -37,38 +38,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted } from "vue";
-import { apiGetNovels, apiRemoveNovel } from "@/apis/novel";
+import { defineComponent, reactive, onMounted } from 'vue'
+import { apiGetNovels, apiRemoveNovel } from '@/apis/novel'
 
 interface Novel {
-  _id: string;
-  name: string;
+  _id: string
+  name: string
 }
 
 export default defineComponent({
-  name: "Novels",
+  name: 'Novels',
 
   setup() {
     const state: { list: Novel[]; total: number; page: number } = reactive({
       list: [],
       total: 0,
-      page: 1,
-    });
+      page: 1
+    })
 
     const getList = async (page?: number) => {
-      const res = await apiGetNovels({ page: page || state.page });
-      state.list = (res.list as unknown) as Novel[];
-      state.total = res.total;
-    };
+      const res = await apiGetNovels({ page: page || state.page })
+      state.list = (res.list as unknown) as Novel[]
+      state.total = res.total
+    }
 
     const remove = async (recode: Novel) => {
-      await apiRemoveNovel(recode._id);
-      await getList();
-    };
+      await apiRemoveNovel(recode._id)
+      await getList()
+    }
 
-    onMounted(getList);
+    onMounted(getList)
 
-    return { state, getList, remove };
-  },
-});
+    return { state, getList, remove }
+  }
+})
 </script>

@@ -12,6 +12,12 @@ export class Novel {
   @Prop()
   cover: string
 
+  @Prop()
+  description: string
+
+  @Prop()
+  protagonist: string
+
   @Prop({ type: () => [Category], ref: () => Category })
   categories: Ref<Category>[]
 
