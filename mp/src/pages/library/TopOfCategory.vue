@@ -61,6 +61,7 @@ const onCategoryChange = async (value = "") => {
             :mode="index === 0 ? 'horizontal' : 'vertical'"
             :show-score="index === 0"
             :show-category="index === 0"
+            height="100px"
           />
         </div>
       </nut-col>

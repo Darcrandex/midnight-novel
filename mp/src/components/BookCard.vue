@@ -14,8 +14,9 @@ const props = withDefaults(
     mode?: "horizontal" | "vertical"; // 横向/竖向
     showCategory?: boolean; // 是否显示分类
     showScore?: boolean; // 是否显示分数
+    height?: string; // 高度(有单位, 竖向有效)
   }>(),
-  { mode: "horizontal", showCategory: true, showScore: true }
+  { mode: "horizontal", showCategory: true, showScore: true, height: "140px" }
 );
 
 const categoryText = computed(() =>
@@ -44,6 +45,7 @@ const infoText = computed(() =>
       :alt="props.data.name"
       :class="$style.cover"
       mode="aspectFill"
+      :style="{ height: props.height }"
     />
     <h1 :class="$style.name">{{ props.data.name }}</h1>
     <p v-if="props.showCategory && categoryText" :class="$style.category">
@@ -81,7 +83,6 @@ const infoText = computed(() =>
 .vertical {
   .cover {
     width: 100%;
-    height: 140px;
     border-radius: 4px;
     overflow: hidden;
   }
@@ -138,9 +139,15 @@ const infoText = computed(() =>
   }
 
   .description {
-    margin: $spacing 0;
+    margin: 0.5 * $spacing 0;
     color: $gray-text-color;
     font-size: 14px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 </style>

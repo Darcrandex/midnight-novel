@@ -19,6 +19,7 @@ export interface Novel {
   name: string;
   author: string;
   description?: string;
+  protagonist?: string;
   categories: Category[];
   cover?: string;
   score?: number;
