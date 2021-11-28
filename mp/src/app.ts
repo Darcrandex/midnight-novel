@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 
 import Taro from "@tarojs/taro";
-import { Button, Toast, Layout, Row, Col } from "@nutui/nutui-taro";
+import { Button, Toast, Layout, Row, Col, Tag } from "@nutui/nutui-taro";
 import "@nutui/nutui-taro/dist/style.css";
 import "@nutui/nutui-taro/dist/styles/themes/default.scss";
 
@@ -24,6 +24,7 @@ App.use(Button)
   .use(Toast)
   .use(Layout)
   .use(Row)
-  .use(Col);
+  .use(Col)
+  .use(Tag);
 
 export default App;
