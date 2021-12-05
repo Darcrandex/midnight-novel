@@ -33,7 +33,7 @@ const list = [
 
 <style lang="scss" module>
 .wrapper {
-  margin: 2 * $spacing $spacing $spacing;
+  margin: 4 * $spacing $spacing $spacing;
 }
 .item {
   display: flex;

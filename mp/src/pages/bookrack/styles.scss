@@ -1,0 +1,129 @@
+$image-width: 50px;
+$image-height: (4/3) * $image-width;
+
+.recommend {
+  background: linear-gradient(
+    to bottom,
+    $theme-color 0%,
+    $theme-color-dark 50%,
+    #fff 50%
+  );
+  overflow: hidden;
+
+  .card {
+    display: flex;
+    margin: $spacing $spacing $spacing;
+    padding: $spacing;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(#000, 0.1);
+
+    .cover {
+      margin-right: $spacing;
+    }
+
+    .body {
+      flex: 1;
+    }
+
+    .desc {
+      font-size: 16px;
+      color: $article-text-color;
+    }
+
+    .name {
+      font-size: 12px;
+      color: $gray-text-color;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      margin-left: 0.5 * $spacing;
+      text-align: center;
+      font-size: 12px;
+      color: $article-text-color;
+
+      .btn {
+        height: 2em;
+        padding: 0 1em;
+        line-height: 2;
+        border-radius: 1em;
+        font-size: 12px;
+        color: $article-text-color;
+        background: linear-gradient(to right, $theme-color-light, $theme-color);
+      }
+    }
+  }
+}
+
+.cover {
+  flex-shrink: 0;
+  width: $image-width;
+  height: $image-height;
+  border-radius: 2px;
+  margin-right: $spacing;
+  box-sizing: border-box;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin: $spacing;
+
+  .body {
+    flex: 1;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing;
+    font-size: 16px;
+    color: $article-text-color;
+  }
+
+  .info {
+    display: flex;
+    justify-content: space-between;
+    color: $gray-text-color;
+    font-size: 12px;
+  }
+
+  .highlight {
+    color: $theme-color;
+  }
+
+  .tag {
+    padding: 0 5px;
+    font-size: 10px;
+    color: $article-text-color;
+    border-radius: 4px;
+    background: $theme-color;
+  }
+}
+
+.add {
+  display: flex;
+  align-items: center;
+  margin: $spacing;
+  .cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $gray-bg-color;
+
+    .add_icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .info {
+    font-size: 14px;
+    color: $gray-text-color;
+  }
+}

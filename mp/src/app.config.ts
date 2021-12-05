@@ -5,6 +5,8 @@ export default {
     "pages/rank/index",
     "pages/category/index",
     "pages/mine/index",
+
+    "pages/all-rankings/index",
   ],
 
   window: {

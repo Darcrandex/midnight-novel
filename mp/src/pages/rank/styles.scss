@@ -1,0 +1,113 @@
+.top_nav {
+  background-color: $theme-color;
+  padding: 0.5 * $spacing $spacing;
+
+  .nav_button {
+    display: inline-block;
+    height: 1.5em;
+    padding: 0 0.75em;
+    line-height: 1.5;
+    border-radius: 1em;
+    border: 1px solid $article-text-color;
+    color: $article-text-color;
+    font-size: 12px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing;
+  border-bottom: 1px solid $gray-bg-color;
+
+  .tilte {
+    font-size: 16px;
+    font-weight: bold;
+    color: $article-text-color;
+  }
+
+  .link {
+    font-size: 12px;
+    color: $sub-text-color;
+  }
+}
+
+.item {
+  padding: $spacing;
+  border-bottom: 1px solid $gray-bg-color;
+  .content {
+    display: flex;
+  }
+
+  .rank_sort {
+    align-self: center;
+    margin-right: $spacing;
+  }
+
+  .cover {
+    width: 60px;
+    height: 75px;
+    margin-right: $spacing;
+    border-radius: 4px;
+    background-color: rgb(139, 124, 124);
+  }
+
+  .body {
+    margin-right: auto;
+
+    .name {
+      margin-bottom: 0.5 * $spacing;
+      font-weight: bold;
+      font-size: 16px;
+      color: $article-text-color;
+    }
+    .info {
+      font-size: 12px;
+      color: $gray-text-color;
+    }
+  }
+}
+
+$number-bg-color: #f7f2ea;
+$number-color: #a08d73;
+.number_wrapper {
+  align-self: flex-start;
+  padding-top: 0.5 * $spacing;
+  background-color: $number-bg-color;
+  border-radius: 4px 4px 0 0;
+
+  .num {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: $number-color;
+  }
+  .text {
+    font-size: 9px;
+    text-align: center;
+    color: $number-color;
+  }
+}
+.number_footer {
+  width: 0;
+  height: 0.5 * $spacing;
+  border-top-width: 0;
+  border-left: 24px solid $number-bg-color;
+  border-right: 24px solid $number-bg-color;
+  border-bottom: 0.5 * $spacing solid transparent;
+}
+
+.reason {
+  margin-top: 0.5 * $spacing;
+  margin-left: 24px + $spacing;
+  font-size: 12px;
+  color: $gray-text-color;
+}
+
+.more_link {
+  padding: 2 * $spacing 0;
+  text-align: center;
+  font-size: 14px;
+  color: $theme-color;
+}
