@@ -7,6 +7,7 @@ export default {
     "pages/mine/index",
 
     "pages/all-rankings/index",
+    "pages/history-rankings/index",
   ],
 
   window: {
