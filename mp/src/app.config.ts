@@ -8,6 +8,8 @@ export default {
 
     "pages/all-rankings/index",
     "pages/history-rankings/index",
+
+    "pages/novel-detail/index",
   ],
 
   window: {

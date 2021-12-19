@@ -1,0 +1,218 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing;
+  background-color: rgba(#000, 0.25);
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    .name {
+      margin-bottom: $spacing;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .info_text {
+      font-size: 14px;
+      color: rgba(#fff, 0.5);
+    }
+    .bottom {
+      margin-top: auto;
+    }
+  }
+
+  .cover {
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px * 4/3;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: $gray-bg-color;
+  }
+}
+
+.statistics {
+  display: flex;
+  padding: $spacing 0;
+
+  .item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 33.33%;
+
+    &:not(:last-child)::after {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      display: block;
+      content: "";
+      width: 1px;
+      height: 22px;
+      background-color: $gray-bg-color;
+      transform: translateY(-50%);
+    }
+
+    .value {
+      color: $article-text-color;
+      .num {
+        display: inline-block;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .text {
+        display: inline-block;
+        font-size: 14px;
+      }
+    }
+    .label {
+      font-size: 14px;
+      color: $gray-text-color;
+    }
+  }
+}
+
+.infos {
+  padding: $spacing;
+
+  .item {
+    margin-bottom: 0.5 * $spacing;
+    .label {
+      font-size: 16px;
+      font-weight: bold;
+      display: inline-block;
+      color: $article-text-color;
+    }
+
+    .value {
+      display: inline;
+      font-size: 16px;
+      color: $article-text-color;
+    }
+
+    .category_item {
+      display: inline-block;
+      margin: 0 10px;
+      color: skyblue;
+      font-size: 16px;
+    }
+  }
+
+  .catalogue {
+    display: flex;
+    align-items: center;
+    padding-top: 0.5 * $spacing;
+    border-top: 1px solid $gray-bg-color;
+
+    .content,
+    .date,
+    .arrow {
+      font-size: 14px;
+      color: $gray-text-color;
+    }
+
+    .content {
+      margin-left: 0.5 * $spacing;
+      margin-right: auto;
+      @extend .text_ellipsis;
+    }
+
+    .arrow {
+      margin-left: 0.5 * $spacing;
+    }
+  }
+}
+
+.novel_content {
+  padding: $spacing;
+}
+
+.section_title {
+  font-size: 18px;
+  font-weight: bold;
+  color: $article-text-color;
+}
+
+.other_novels {
+  padding: $spacing;
+  .item {
+    display: flex;
+    margin: 0.5 * $spacing 0;
+    .cover {
+      flex-shrink: 0;
+      margin-right: 0.5 * $spacing;
+      width: 80px;
+      height: 80px * 4/3;
+      border-radius: 4px;
+      overflow: hidden;
+      background-color: $gray-bg-color;
+    }
+
+    .body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .name {
+        margin-right: auto;
+        font-size: 16px;
+        font-weight: bold;
+        color: $article-text-color;
+      }
+
+      .score {
+        color: $theme-color;
+        .num {
+          display: inline;
+          font-size: 16px;
+          font-weight: bold;
+        }
+        .text {
+          display: inline;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .desc,
+    .info {
+      color: $gray-text-color;
+      font-size: 14px;
+    }
+    .desc {
+      margin-top: auto;
+      margin-bottom: 0.5 * $spacing;
+    }
+  }
+}
+
+.like {
+  padding: $spacing;
+
+  .list {
+    margin: 0 -0.5 * $spacing;
+  }
+  .item {
+    margin: 0.5 * $spacing;
+    .cover {
+      width: 100%;
+      height: 120px;
+      border-radius: 4px;
+      background-color: $gray-bg-color;
+    }
+
+    .name {
+      @extend .text_ellipsis;
+      font-size: 14px;
+      color: $article-text-color;
+    }
+  }
+}

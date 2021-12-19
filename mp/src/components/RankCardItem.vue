@@ -6,7 +6,9 @@
  */
 
 import RankSort from "./RankSort.vue";
-const props = withDefaults(defineProps<{ index?: number }>(), { index: 1 });
+const props = withDefaults(defineProps<{ index?: number }>(), {
+  index: 1,
+});
 </script>
 
 <template>

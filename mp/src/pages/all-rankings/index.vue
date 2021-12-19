@@ -5,16 +5,30 @@
  * @description 所有排行榜
  */
 
+import { ref } from "vue";
 import RankSort from "@/components/RankSort.vue";
 import RoundButton from "@/components/RoundButton.vue";
+
+const typeOptions = [
+  { value: "all", label: "全部" },
+  { value: "1", label: "都市" },
+  { value: "2", label: "玄幻" },
+];
+
+const type = ref(typeOptions[0].value);
 </script>
 
 <template>
   <main :class="$style.main">
     <header :class="$style.header">
-      <RoundButton :active="true" style="margin-right: 10px;">全部</RoundButton>
-      <RoundButton style="margin-right: 10px;">都市</RoundButton>
-      <RoundButton style="margin-right: 10px;">玄幻</RoundButton>
+      <RoundButton
+        v-for="item in typeOptions"
+        :active="item.value === type"
+        style="margin-right: 16px;"
+        @click="() => (type = item.value)"
+      >
+        {{ item.label }}
+      </RoundButton>
     </header>
 
     <section :class="$style.body">

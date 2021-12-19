@@ -28,7 +28,12 @@ import RankCardItem from "@/components/RankCardItem.vue";
     >
   </header>
 
-  <RankCardItem v-for="i in 20" :key="i" :index="i + 1" />
+  <RankCardItem
+    v-for="i in 20"
+    :key="i"
+    :index="i + 1"
+    @click="navigateTo({ url: `/pages/novel-detail/index?id=${i}` })"
+  />
 
   <p
     :class="$style.more_link"
