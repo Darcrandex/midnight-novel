@@ -6,13 +6,24 @@
  */
 
 import RankSort from "./RankSort.vue";
-const props = withDefaults(defineProps<{ index?: number }>(), {
-  index: 1,
-});
+const props = withDefaults(
+  defineProps<{
+    index?: number;
+    showScore?: boolean;
+    showReason?: boolean;
+    bordered?: boolean;
+  }>(),
+  {
+    index: 1,
+    showScore: true,
+    showReason: true,
+    bordered: true,
+  }
+);
 </script>
 
 <template>
-  <section :class="$style.item">
+  <section :class="[$style.item, props.bordered && $style.bordered]">
     <section :class="$style.content">
       <span :class="$style.rank_sort">
         <RankSort :sort="props.index" />
@@ -26,7 +37,7 @@ const props = withDefaults(defineProps<{ index?: number }>(), {
         <p :class="$style.info">杀伐果断·连载·895万字</p>
       </div>
 
-      <div>
+      <div v-if="props.showScore">
         <div :class="$style.number_wrapper">
           <span :class="$style.num">
             99.5
@@ -37,27 +48,33 @@ const props = withDefaults(defineProps<{ index?: number }>(), {
       </div>
     </section>
 
-    <section :class="$style.reason">(必读理由) 老子让你读就给老子读</section>
+    <section v-if="props.showReason" :class="$style.reason">
+      (必读理由) 老子让你读就给老子读
+    </section>
   </section>
 </template>
 
 <style lang="scss" module>
 .item {
   padding: $spacing;
-  border-bottom: 1px solid $gray-bg-color;
+
+  &.bordered {
+    border-bottom: 1px solid $gray-bg-color;
+  }
+
   .content {
     display: flex;
   }
 
   .rank_sort {
     align-self: center;
-    margin-right: $spacing;
+    margin-right: 0.5 * $spacing;
   }
 
   .cover {
     width: 60px;
     height: 75px;
-    margin-right: $spacing;
+    margin-right: 0.5 * $spacing;
     border-radius: 4px;
     background-color: rgb(139, 124, 124);
   }

@@ -71,13 +71,13 @@
   padding: $spacing;
 
   .sort {
-    margin-right: $spacing;
+    margin-right: 0.5 * $spacing;
   }
 
   .cover {
     width: 36px;
     height: 42px;
-    margin-right: $spacing;
+    margin-right: 0.5 * $spacing;
     border-radius: 2px;
     background-color: rgb(187, 187, 187);
   }

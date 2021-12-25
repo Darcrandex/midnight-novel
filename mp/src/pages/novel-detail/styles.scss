@@ -130,17 +130,12 @@
   padding: $spacing;
 }
 
-.section_title {
-  font-size: 18px;
-  font-weight: bold;
-  color: $article-text-color;
-}
-
 .other_novels {
-  padding: $spacing;
+  padding: $spacing 0;
   .item {
     display: flex;
-    margin: 0.5 * $spacing 0;
+    margin: $spacing 0;
+    padding: 0 $spacing;
     .cover {
       flex-shrink: 0;
       margin-right: 0.5 * $spacing;
@@ -195,10 +190,10 @@
 }
 
 .like {
-  padding: $spacing;
+  padding: $spacing 0;
 
   .list {
-    margin: 0 -0.5 * $spacing;
+    margin: 0 0.5 * $spacing;
   }
   .item {
     margin: 0.5 * $spacing;

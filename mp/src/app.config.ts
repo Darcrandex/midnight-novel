@@ -10,6 +10,7 @@ export default {
     "pages/history-rankings/index",
 
     "pages/novel-detail/index",
+    "pages/search/index",
   ],
 
   window: {

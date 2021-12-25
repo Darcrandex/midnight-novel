@@ -5,13 +5,18 @@
  * @description 顶部搜索
  */
 
+import Taro from "@tarojs/taro";
 import icoSearch from "@/assets/icons/icon-search.png";
 </script>
 
 <template>
   <section :class="$style.wrapper">
-    <img :src="icoSearch" alt="" :class="$style.search_btn" />
-    <div :class="$style.search">请输入关键字</div>
+    <img
+      :src="icoSearch"
+      alt=""
+      :class="$style.search_btn"
+      @click="Taro.navigateTo({ url: '/pages/search/index' })"
+    />
   </section>
 </template>
 

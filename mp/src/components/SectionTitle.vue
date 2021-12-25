@@ -26,7 +26,7 @@
 }
 
 .title {
-  font-size: 120%;
+  font-size: 16px;
   font-family: "Bitstream Vera Serif Bold";
   font-weight: bold;
   color: $article-text-color;

@@ -88,10 +88,11 @@ const onTypeChan = async (type = "") => {
   overflow: hidden;
   .item {
     flex: 1;
-    padding: 0.5 * $spacing $spacing;
+    padding: 0.5 * $spacing;
     background-color: $gray-bg-color;
     color: $sub-text-color;
     text-align: center;
+    font-size: 12px;
     &.border {
       margin-left: 1px;
     }

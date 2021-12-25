@@ -5,6 +5,7 @@
  * @description 小说详情页
  */
 
+import SectionTitle from "@/components/SectionTitle.vue";
 import Divider from "@/components/Divider.vue";
 const html = `<h1 style="color: red">文章内容</h1>`;
 </script>
@@ -76,7 +77,7 @@ const html = `<h1 style="color: red">文章内容</h1>`;
   <Divider />
 
   <section :class="$style.other_novels">
-    <h1 :class="$style.section_title">作者其他作品</h1>
+    <SectionTitle>作者其他作品</SectionTitle>
 
     <div :class="$style.item">
       <img src="" alt="" mode="aspectFill" :class="$style.cover" />
@@ -99,9 +100,17 @@ const html = `<h1 style="color: red">文章内容</h1>`;
   <Divider />
 
   <section :class="$style.like">
-    <h1 :class="$style.section_title">猜你喜欢</h1>
+    <SectionTitle>猜你喜欢</SectionTitle>
     <div :class="$style.list">
       <nut-row type="flex" wrap="wrap">
+        <nut-col :span="8">
+          <div :class="$style.item">
+            <img src="" alt="" mode="aspectFill" :class="$style.cover" />
+            <p :class="$style.name">
+              都市之最强仙医
+            </p>
+          </div>
+        </nut-col>
         <nut-col :span="8">
           <div :class="$style.item">
             <img src="" alt="" mode="aspectFill" :class="$style.cover" />
