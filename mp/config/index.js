@@ -83,7 +83,10 @@ const config = {
 };
 
 module.exports = function(merge) {
-  if (process.env.NODE_ENV === "development") {
+  // 由于开发模式打的包很大，所以把 NODE_ENV 改成了 production
+  // 但也因此把原来的逻辑破坏了
+  // 因此使用另外一个值 “MODE” 来表示真实需要的模式
+  if (process.env.MODE === "development") {
     return merge({}, config, require("./dev"));
   }
   return merge({}, config, require("./prod"));

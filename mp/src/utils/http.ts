@@ -1,7 +1,7 @@
 import Taro from "@tarojs/taro";
 
 const isDev = process.env.NODE_ENV === "development";
-const baseURL = isDev ? "http://192.168.0.101:7895" : "";
+const baseURL = isDev ? "http://localhost:7895" : "";
 
 async function fetch<Response = void>(
   options: Taro.request.Option
